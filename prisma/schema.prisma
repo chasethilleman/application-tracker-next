@@ -12,6 +12,26 @@ datasource db {
 
 // schema.prisma
 
+enum ApplicationStatus {
+  Applied
+  Interviewing
+  Offered
+  Rejected
+}
+
+model Application {
+  id              String             @id @default(cuid())
+  company         String
+  jobTitle        String
+  status          ApplicationStatus
+  applicationDate DateTime
+  salary          String?
+  link            String?
+  notes           String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
 model Post {
   id        String  @id @default(cuid())
   title     String
