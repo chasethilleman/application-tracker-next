@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import {
     STATUS_OPTIONS,
