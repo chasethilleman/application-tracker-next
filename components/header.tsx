@@ -69,18 +69,18 @@ export default function Header({
 }: HeaderProps) {
     return (
         <header className="header pt-4 pb-4 border-b border-slate-200 dark:border-neutral-800 mb-4 bg-white dark:bg-neutral-900 sticky top-0 z-10 transition-colors">
-            <div className="header-card justify-between">
+            <div className="header-card justify-between items-center mb-4 flex">
                 <div className="flex items-center">
                     <Image
                         src={JobsyBlack}
                         alt="Jobsy Logo"
-                        className={clsx("h-8 w-auto", "dark:hidden")}
+                        className={clsx("h-16 w-auto", "dark:hidden")}
                         priority
                     />
                     <Image
                         src={JobsyWhite}
                         alt="Jobsy Logo"
-                        className={clsx("hidden h-8 w-auto", "dark:block")}
+                        className={clsx("hidden h-16 w-auto", "dark:block")}
                         priority
                     />
                 </div>
