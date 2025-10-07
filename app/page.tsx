@@ -64,6 +64,26 @@ export default function Home() {
     }
   }
 
+  async function deleteApplication(id: string) {
+    try {
+      const response = await fetch(`/api/applications/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const payload = (await response.json()) as { message?: string };
+        throw new Error(payload.message ?? "Failed to delete application");
+      }
+
+      setApplications((prev) => prev.filter((app) => app.id !== id));
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Unable to delete application";
+      setError(message);
+      throw err;
+    }
+  }
+
   const totalApplications = applications.length;
   const appliedApplications = applications.filter(
     (app) => app.status === "Applied"
@@ -109,6 +129,7 @@ export default function Home() {
                   <ApplicationCard
                     key={`${application.company}-${application.applicationDate}-${index}`}
                     {...application}
+                    deleteApplication={() => deleteApplication(application.id)}
                   />
                 ))}
               </div>

@@ -7,16 +7,34 @@ import {
     DollarSign,
     Link,
     FileText,
+    Trash2
 } from "lucide-react";
 
-type ApplicationCardProps = ApplicationRecord;
+type ApplicationCardProps = ApplicationRecord & {
+    deleteApplication: () => void;
+};
 
 export default function ApplicationCard(props: ApplicationCardProps) {
+
+    async function handleDelete() {
+        if (confirm(`Are you sure you want to delete the application to ${props.company}? This action cannot be undone.`)) {
+            try {
+                await props.deleteApplication();
+            } catch (err) {
+                const message =
+                    err instanceof Error ? err.message : "Unable to delete application";
+                alert(message);
+            }
+        }
+    }
     return (
         <>
             <div className="application-card border border-slate-200 dark:border-neutral-800 rounded-lg p-4 bg-white dark:bg-neutral-900 shadow text-left hover:shadow-lg transition-colors transition-shadow duration-300">
                 <h2 className="text-xl font-bold flex items-center pb-2 text-slate-900 dark:text-slate-100">
                     {props.company}
+                    <button onClick={handleDelete} aria-label={`Delete application to ${props.company}`}>
+                        <Trash2 className="ml-2 h-5 w-5 text-red-500 cursor-pointer" aria-hidden />
+                    </button>
                 </h2>
                 <p
                     className={clsx(

@@ -144,4 +144,32 @@ export async function POST(req: NextRequest) {
     }
 }
 
+export async function DELETE(req: NextRequest) {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+        return NextResponse.json<ErrorResponse>(
+            { message: "Missing application ID" },
+            { status: 400 }
+        );
+    }
+
+    try {
+        await prisma.application.delete({
+            where: { id },
+        });
+
+        return NextResponse.json<SuccessResponse>({} as ApplicationRecord, {
+            status: 204,
+        });
+    } catch (error) {
+        console.error("Failed to delete application", error);
+        return NextResponse.json<ErrorResponse>(
+            { message: "Failed to delete application" },
+            { status: 500 }
+        );
+    }
+}
+
 export const runtime = "nodejs";
