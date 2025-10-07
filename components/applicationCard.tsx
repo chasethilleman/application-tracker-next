@@ -29,7 +29,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
     return (
         <>
             <div className="application-card border border-slate-200 dark:border-neutral-800 rounded-lg p-4 bg-white dark:bg-neutral-900 shadow text-left hover:shadow-lg transition-colors transition-shadow duration-300">
-                <h2 className="text-xl font-bold flex items-center pb-2 text-slate-900 dark:text-slate-100">
+                <h2 className="text-xl font-bold flex items-center pb-2 text-slate-900 dark:text-slate-100 justify-between">
                     {props.company}
                     <button onClick={handleDelete} aria-label={`Delete application to ${props.company}`}>
                         <Trash2 className="ml-2 h-5 w-5 text-red-500 cursor-pointer" aria-hidden />
