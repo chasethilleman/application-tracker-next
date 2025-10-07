@@ -1,3 +1,5 @@
+import Image from "next/image";
+import clsx from "clsx";
 import { ScrollText, Check, BadgeCheck, X, Calendar } from "lucide-react";
 import JobsyBlack from "../assets/jobsy-black.png";
 import JobsyWhite from "../assets/jobsy-white.png";
@@ -14,7 +16,20 @@ function HeaderCard(props: { title: string; count: number }) {
     return (
         <>
             <div className="header-card justify-between">
-                <img src={JobsyBlack.src} alt="Jobsy Logo" className="h-8 w-auto" />
+                <div className="flex items-center">
+                    <Image
+                        src={JobsyBlack}
+                        alt="Jobsy Logo"
+                        className={clsx("h-8 w-auto", "dark:hidden")}
+                        priority
+                    />
+                    <Image
+                        src={JobsyWhite}
+                        alt="Jobsy Logo"
+                        className={clsx("hidden h-8 w-auto", "dark:block")}
+                        priority
+                    />
+                </div>
             </div>
             <div className="border border-slate-200 dark:border-neutral-800 rounded-lg p-4 text-center w-full md:flex-1 min-w-0 bg-white dark:bg-neutral-900 transition-colors">
                 <div className="flex items-center justify-between">
