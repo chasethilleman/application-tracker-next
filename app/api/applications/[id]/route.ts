@@ -6,11 +6,11 @@ type ErrorResponse = { message: string };
 
 export async function DELETE(
     _request: NextRequest,
-    context: { params: { id?: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
-    const id = context.params.id;
+    const { id } = await context.params;
 
-    if (typeof id !== "string" || id.trim().length === 0) {
+    if (!id || id.trim().length === 0) {
         return NextResponse.json<ErrorResponse>(
             { message: "Invalid application id" },
             { status: 400 }
