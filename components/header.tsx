@@ -68,8 +68,8 @@ export default function Header({
     rejectedApplications,
 }: HeaderProps) {
     return (
-        <header className="header pt-4 pb-4 border-b border-slate-200 dark:border-neutral-800 mb-4 bg-white dark:bg-neutral-900 sticky top-0 z-10 transition-colors">
-            <div className="header-card justify-between items-center mb-4 flex">
+        <header className="header pb-4 border-b border-slate-200 dark:border-neutral-800 mb-4 bg-white dark:bg-neutral-900 sticky top-0 z-10 transition-colors">
+            <div className="header-card justify-between items-center mb-6 flex border-b border-b border-slate-200 dark:border-neutral-800 mb-4 pb-4 pt-4">
                 <div className="flex items-center">
                     <Image
                         src={JobsyBlack}
