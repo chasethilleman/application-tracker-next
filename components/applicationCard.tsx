@@ -1,17 +1,16 @@
 import type { ApplicationRecord } from "@shared/applicationSchema";
 import clsx from "clsx";
 import {
-    Building,
     Briefcase,
     Calendar,
     DollarSign,
     Link,
     FileText,
-    Trash2
+    Trash2,
 } from "lucide-react";
 
 type ApplicationCardProps = ApplicationRecord & {
-    deleteApplication: () => void;
+    deleteApplication: () => Promise<void>;
 };
 
 export default function ApplicationCard(props: ApplicationCardProps) {
