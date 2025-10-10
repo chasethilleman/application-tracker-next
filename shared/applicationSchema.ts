@@ -19,6 +19,7 @@ export type ApplicationFormValues = {
 
 export type ApplicationRecord = ApplicationFormValues & {
     id: string;
+    userId: string;
     createdAt: string;
     updatedAt: string;
 };

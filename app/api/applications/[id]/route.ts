@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { auth } from "@/auth";
 
 type ErrorResponse = { message: string };
 
@@ -17,8 +18,26 @@ export async function DELETE(
         );
     }
 
+    const session = await auth();
+    if (!session?.user?.id) {
+        return NextResponse.json<ErrorResponse>(
+            { message: "Unauthorized" },
+            { status: 401 }
+        );
+    }
+
     try {
-        await prisma.application.delete({ where: { id } });
+        const result = await prisma.application.deleteMany({
+            where: { id, userId: session.user.id },
+        });
+
+        if (result.count === 0) {
+            return NextResponse.json<ErrorResponse>(
+                { message: "Application not found" },
+                { status: 404 }
+            );
+        }
+
         return new NextResponse(null, { status: 204 });
     } catch (error) {
         if (

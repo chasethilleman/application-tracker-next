@@ -5,6 +5,7 @@ import Header from "../components/header";
 import Form from "../components/form";
 import ApplicationCard from "../components/applicationCard";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
+import { signIn, useSession } from "next-auth/react";
 
 import type {
   ApplicationFormValues,
@@ -12,33 +13,68 @@ import type {
 } from "@shared/applicationSchema";
 
 export default function Home() {
+  const { data: session, status } = useSession();
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [confetti, setConfetti] = useState(false);
 
   useEffect(() => {
+    let isCancelled = false;
+
     async function loadApplications() {
+      setLoading(true);
+      setError(null);
       try {
         const response = await fetch("/api/applications");
         if (!response.ok) {
           throw new Error("Failed to load applications");
         }
         const data = (await response.json()) as ApplicationRecord[];
-        setApplications(data);
+        if (!isCancelled) {
+          setApplications(data);
+        }
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Unable to load applications";
-        setError(message);
+        if (!isCancelled) {
+          setError(message);
+        }
       } finally {
-        setLoading(false);
+        if (!isCancelled) {
+          setLoading(false);
+        }
       }
     }
 
+    if (status === "loading") {
+      setLoading(true);
+      return () => {
+        isCancelled = true;
+      };
+    }
+
+    if (status !== "authenticated") {
+      setApplications([]);
+      setError(null);
+      setLoading(false);
+      return () => {
+        isCancelled = true;
+      };
+    }
+
     void loadApplications();
-  }, []);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [status]);
 
   async function addApplication(application: ApplicationFormValues) {
+    if (status !== "authenticated") {
+      setError("You must be signed in to add applications.");
+      return;
+    }
     try {
       const response = await fetch("/api/applications", {
         method: "POST",
@@ -65,6 +101,10 @@ export default function Home() {
   }
 
   async function deleteApplication(id: string) {
+    if (status !== "authenticated") {
+      setError("You must be signed in to delete applications.");
+      return;
+    }
     try {
       const response = await fetch(`/api/applications/${id}`, {
         method: "DELETE",
@@ -97,11 +137,15 @@ export default function Home() {
   const rejectedApplications = applications.filter(
     (app) => app.status === "Rejected"
   ).length;
+  const isAuthenticated = status === "authenticated" && Boolean(session?.user);
+  const isSessionLoading = status === "loading";
 
   return (
     <div className="min-w-screen min-h-screen bg-white text-slate-900 dark:bg-neutral-900 dark:text-white transition-colors">
       <div className="min-h-screen bg-white text-slate-900 dark:bg-neutral-900 dark:text-white transition-colors max-w-7xl mx-auto p-8">
-        {confetti && <Fireworks autorun={{ speed: 3, duration: 3000 }} />}
+        {confetti && isAuthenticated && (
+          <Fireworks autorun={{ speed: 3, duration: 3000 }} />
+        )}
         <Header
           totalApplications={totalApplications}
           appliedApplications={appliedApplications}
@@ -109,37 +153,62 @@ export default function Home() {
           offeredApplications={offeredApplications}
           rejectedApplications={rejectedApplications}
         />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-          <Form addApplication={addApplication} />
-          <div className="applications-list col-span-2">
-            {error && <p className="text-red-600 dark:text-red-400">{error}</p>}
-            {loading && (
-              <div className="flex flex-col items-center justify-center gap-4 py-12 text-slate-600 dark:text-slate-300">
-                <div
-                  className="h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
-                  role="status"
-                  aria-label="Loading applications"
-                />
-                <p>Loading applications…</p>
-              </div>
-            )}
-            {applications.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                {applications.map((application) => (
-                  <ApplicationCard
-                    key={application.id}
-                    {...application}
-                    deleteApplication={() => deleteApplication(application.id)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <p className="text-slate-600 dark:text-slate-300 text-center">
-                No applications found.
-              </p>
-            )}
+        {isSessionLoading ? (
+          <div className="flex flex-col items-center justify-center gap-4 py-20 text-slate-600 dark:text-slate-300">
+            <div
+              className="h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
+              role="status"
+              aria-label="Checking session"
+            />
+            <p>Checking your session…</p>
           </div>
-        </div>
+        ) : isAuthenticated ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+            <Form addApplication={addApplication} />
+            <div className="applications-list col-span-2">
+              {error && (
+                <p className="mb-4 text-red-600 dark:text-red-400">{error}</p>
+              )}
+              {loading ? (
+                <div className="flex flex-col items-center justify-center gap-4 py-12 text-slate-600 dark:text-slate-300">
+                  <div
+                    className="h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
+                    role="status"
+                    aria-label="Loading applications"
+                  />
+                  <p>Loading applications…</p>
+                </div>
+              ) : applications.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                  {applications.map((application) => (
+                    <ApplicationCard
+                      key={application.id}
+                      {...application}
+                      deleteApplication={() => deleteApplication(application.id)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-slate-600 dark:text-slate-300 text-center">
+                  No applications found.
+                </p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-4 py-20 text-center text-slate-700 dark:text-slate-200">
+            <p className="text-lg font-medium">
+              Sign in to track and manage your applications.
+            </p>
+            <button
+              type="button"
+              onClick={() => signIn()}
+              className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
+            >
+              Sign in
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

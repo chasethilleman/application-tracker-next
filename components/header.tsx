@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import clsx from "clsx";
 import { ScrollText, Check, BadgeCheck, X, Calendar } from "lucide-react";
 import JobsyBlack from "../assets/jobsy-black.png";
 import JobsyWhite from "../assets/jobsy-white.png";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 type HeaderProps = {
     totalApplications: number;
@@ -67,6 +70,22 @@ export default function Header({
     offeredApplications,
     rejectedApplications,
 }: HeaderProps) {
+    const { data: session, status } = useSession();
+    const isLoadingSession = status === "loading";
+    const isAuthenticated = status === "authenticated" && Boolean(session?.user);
+    const userDisplayName =
+        session?.user?.name ??
+        session?.user?.email ??
+        (isAuthenticated ? "Signed in" : null);
+
+    function handleAuthAction() {
+        if (isAuthenticated) {
+            void signOut();
+        } else {
+            void signIn();
+        }
+    }
+
     return (
         <header className="header pb-4 border-b border-slate-200 dark:border-neutral-800 mb-4 bg-white dark:bg-neutral-900 sticky top-0 z-10 transition-colors">
             <div className="header-card justify-between items-center mb-6 flex border-b border-b border-slate-200 dark:border-neutral-800 mb-4 pb-4 pt-4">
@@ -83,6 +102,25 @@ export default function Header({
                         className={clsx("hidden h-16 w-auto", "dark:block")}
                         priority
                     />
+                </div>
+                <div className="flex items-center gap-3">
+                    {userDisplayName && (
+                        <span className="text-sm text-slate-600 dark:text-slate-300 truncate max-w-[12rem]">
+                            {userDisplayName}
+                        </span>
+                    )}
+                    <button
+                        type="button"
+                        onClick={handleAuthAction}
+                        disabled={isLoadingSession}
+                        className="inline-flex items-center justify-center rounded-md border border-slate-300 dark:border-neutral-700 px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200 transition-colors hover:bg-slate-100 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                        {isLoadingSession
+                            ? "Checking…"
+                            : isAuthenticated
+                                ? "Sign out"
+                                : "Sign in"}
+                    </button>
                 </div>
             </div>
             <div className="stats flex flex-col gap-4 md:flex-row">

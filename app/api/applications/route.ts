@@ -6,6 +6,7 @@ import {
     type ApplicationRecord,
     type ApplicationStatus,
 } from "@shared/applicationSchema";
+import { auth } from "@/auth";
 
 type ErrorResponse = { message: string };
 type SuccessResponse = ApplicationRecord | ApplicationRecord[];
@@ -59,6 +60,7 @@ function toApplicationRecord(application: {
     notes: string | null;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
 }): ApplicationRecord {
     return {
         id: application.id,
@@ -69,14 +71,18 @@ function toApplicationRecord(application: {
         salary: application.salary ?? "",
         link: application.link ?? "",
         notes: application.notes ?? "",
+        userId: application.userId,
         createdAt: application.createdAt.toISOString(),
         updatedAt: application.updatedAt.toISOString(),
     };
 }
 
 export async function GET() {
+    const session = await auth();
+    if (!session?.user?.id) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     try {
         const applications = await prisma.application.findMany({
+            where: { userId: session.user.id },
             orderBy: { createdAt: "desc" },
         });
 
@@ -102,6 +108,9 @@ async function parseRequestBody(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
     const body = await parseRequestBody(req);
+    const session = await auth();
+
+    if (!session?.user?.id) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     if (!isApplicationPayload(body)) {
         return NextResponse.json<ErrorResponse>(
@@ -128,6 +137,7 @@ export async function POST(req: NextRequest) {
                 salary: toNullable(body.salary),
                 link: toNullable(body.link),
                 notes: toNullable(body.notes),
+                userId: session.user.id,
             },
         });
 
