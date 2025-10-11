@@ -91,9 +91,9 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                             href={props.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-500 dark:text-blue-300 dark:hover:text-blue-200"
+                            className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
                         >
-                            Link to Posting
+                            Original Posting
                         </a>
                     ) : (
                         "No link provided"
