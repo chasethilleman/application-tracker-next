@@ -180,11 +180,12 @@ export default function Home() {
                 </div>
               ) : applications.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                  {applications.map((application) => (
+                  {applications.map((application, index) => (
                     <ApplicationCard
                       key={application.id}
                       {...application}
                       deleteApplication={() => deleteApplication(application.id)}
+                      animationDelay={index * 80}
                     />
                   ))}
                 </div>

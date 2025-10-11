@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { ApplicationRecord } from "@shared/applicationSchema";
 import clsx from "clsx";
 import {
@@ -11,6 +12,7 @@ import {
 
 type ApplicationCardProps = ApplicationRecord & {
     deleteApplication: () => Promise<void>;
+    animationDelay?: number;
 };
 
 export default function ApplicationCard(props: ApplicationCardProps) {
@@ -18,8 +20,12 @@ export default function ApplicationCard(props: ApplicationCardProps) {
         props.salary.trim().length > 0
             ? Number.isNaN(Number(props.salary))
                 ? props.salary
-                : Number(props.salary).toLocaleString()
+            : Number(props.salary).toLocaleString()
             : "—";
+    const animationStyle: CSSProperties | undefined =
+        props.animationDelay !== undefined
+            ? { animationDelay: `${props.animationDelay}ms` }
+            : undefined;
 
     async function handleDelete() {
         if (confirm(`Are you sure you want to delete the application to ${props.company}? This action cannot be undone.`)) {
@@ -34,7 +40,10 @@ export default function ApplicationCard(props: ApplicationCardProps) {
     }
     return (
         <>
-            <div className="application-card border border-slate-200 dark:border-neutral-800 rounded-lg p-4 bg-white dark:bg-neutral-900 shadow text-left hover:shadow-lg transition-colors transition-shadow duration-300">
+            <div
+                className="application-card border border-slate-200 dark:border-neutral-800 rounded-lg p-4 bg-white dark:bg-neutral-900 shadow text-left hover:shadow-lg transition-colors transition-shadow duration-300 card-slide-in"
+                style={animationStyle}
+            >
                 <h2 className="text-xl font-bold flex items-center pb-2 text-slate-900 dark:text-slate-100 justify-between">
                     {props.company}
                     <button onClick={handleDelete} aria-label={`Delete application to ${props.company}`}>
