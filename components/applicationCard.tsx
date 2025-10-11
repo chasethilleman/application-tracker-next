@@ -14,6 +14,12 @@ type ApplicationCardProps = ApplicationRecord & {
 };
 
 export default function ApplicationCard(props: ApplicationCardProps) {
+    const formattedSalary =
+        props.salary.trim().length > 0
+            ? Number.isNaN(Number(props.salary))
+                ? props.salary
+                : Number(props.salary).toLocaleString()
+            : "—";
 
     async function handleDelete() {
         if (confirm(`Are you sure you want to delete the application to ${props.company}? This action cannot be undone.`)) {
@@ -73,7 +79,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                         className="mr-2 h-4 w-4 text-slate-500 dark:text-slate-300"
                         aria-hidden
                     />
-                    {props.salary || "—"}
+                    {formattedSalary}
                 </p>
                 <p className="flex items-center py-1 break-all text-slate-600 dark:text-slate-300">
                     <Link
