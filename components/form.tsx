@@ -147,6 +147,20 @@ export default function Form({ addApplication }: FormProps) {
                     onChange={onChange}
                 />
                 <label
+                    htmlFor="notes"
+                    className="block text-sm font-medium text-gray-900 dark:text-white text-left"
+                >
+                    Notes
+                </label>
+                <textarea
+                    name="notes"
+                    id="notes"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Notes"
+                    value={formData.notes}
+                    onChange={onChange}
+                ></textarea>
+                <label
                     htmlFor="link"
                     className="block text-sm font-medium text-gray-900 dark:text-white text-left"
                 >
@@ -161,20 +175,6 @@ export default function Form({ addApplication }: FormProps) {
                     value={formData.link}
                     onChange={onChange}
                 />
-                <label
-                    htmlFor="notes"
-                    className="block text-sm font-medium text-gray-900 dark:text-white text-left"
-                >
-                    Notes
-                </label>
-                <textarea
-                    name="notes"
-                    id="notes"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Notes"
-                    value={formData.notes}
-                    onChange={onChange}
-                ></textarea>
                 <button
                     type="submit"
                     className="mt-2 inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60"

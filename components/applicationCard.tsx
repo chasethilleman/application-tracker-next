@@ -97,7 +97,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
                         >
-                            Original Posting <ExternalLink className="ml-1 h-3 w-3" aria-hidden />
+                            Original Posting <ExternalLink className="ml-1 h-4 w-4" aria-hidden />
                         </a>
                     ) : (
                         "No link provided"
