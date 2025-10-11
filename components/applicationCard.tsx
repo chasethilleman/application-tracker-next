@@ -7,6 +7,7 @@ import {
     Link,
     FileText,
     Trash2,
+    ExternalLink
 } from "lucide-react";
 
 type ApplicationCardProps = ApplicationRecord & {
@@ -81,11 +82,14 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                     />
                     {formattedSalary}
                 </p>
-                <p className="flex items-center py-1 break-all text-slate-600 dark:text-slate-300">
-                    <Link
-                        className="mr-2 h-4 w-4 text-slate-500 dark:text-slate-300"
+                <p className="flex items-start py-1 text-slate-600 dark:text-slate-300">
+                    <FileText
+                        className="mr-2 min-h-4 min-w-4 max-h-4 max-w-4 text-slate-500 dark:text-slate-300 mt-1"
                         aria-hidden
                     />{" "}
+                    {props.notes}
+                </p>
+                <p className="flex items-center py-1 break-all text-slate-600 dark:text-slate-300">
                     {props.link ? (
                         <a
                             href={props.link}
@@ -93,18 +97,11 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
                         >
-                            Original Posting
+                            Original Posting <ExternalLink className="ml-1 h-3 w-3" aria-hidden />
                         </a>
                     ) : (
                         "No link provided"
                     )}
-                </p>
-                <p className="flex items-start py-1 text-slate-600 dark:text-slate-300">
-                    <FileText
-                        className="mr-2 min-h-4 min-w-4 max-h-4 max-w-4 text-slate-500 dark:text-slate-300 mt-1"
-                        aria-hidden
-                    />{" "}
-                    {props.notes}
                 </p>
             </div>
         </>
