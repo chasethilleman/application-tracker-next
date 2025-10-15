@@ -124,6 +124,41 @@ export default function Home() {
     }
   }
 
+  async function updateApplication(
+    id: string,
+    updates: ApplicationFormValues
+  ): Promise<ApplicationRecord | void> {
+    if (status !== "authenticated") {
+      const message = "You must be signed in to update applications.";
+      setError(message);
+      throw new Error(message);
+    }
+
+    try {
+      const response = await fetch(`/api/applications/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      });
+
+      if (!response.ok) {
+        const payload = (await response.json()) as { message?: string };
+        throw new Error(payload.message ?? "Failed to update application");
+      }
+
+      const updated = (await response.json()) as ApplicationRecord;
+      setApplications((prev) =>
+        prev.map((app) => (app.id === id ? updated : app))
+      );
+      return updated;
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Unable to update application";
+      setError(message);
+      throw err;
+    }
+  }
+
   const totalApplications = applications.length;
   const appliedApplications = applications.filter(
     (app) => app.status === "Applied"
@@ -185,6 +220,7 @@ export default function Home() {
                       key={application.id}
                       {...application}
                       deleteApplication={() => deleteApplication(application.id)}
+                      updateApplication={updateApplication}
                       animationDelay={index * 80}
                     />
                   ))}
