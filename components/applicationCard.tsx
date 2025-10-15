@@ -10,10 +10,10 @@ import {
     Briefcase,
     Calendar,
     DollarSign,
-    Link,
     FileText,
     Trash2,
-    Pencil
+    Pencil,
+    ExternalLink,
 } from "lucide-react";
 import EditApplicationModal from "./editApplicationModal";
 
@@ -145,30 +145,26 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                     />
                     {formattedSalary}
                 </p>
-                <p className="flex items-center py-1 break-all text-slate-600 dark:text-slate-300">
-                    <Link
-                        className="mr-2 h-4 w-4 text-slate-500 dark:text-slate-300"
-                        aria-hidden
-                    />
-                    {application.link ? (
-                        <a
-                            href={application.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
-                        >
-                            Link to Posting
-                        </a>
-                    ) : (
-                        "No link provided"
-                    )}
-                </p>
                 <p className="flex items-start py-1 text-slate-600 dark:text-slate-300">
                     <FileText
                         className="mr-2 mt-1 min-h-4 min-w-4 max-h-4 max-w-4 text-slate-500 dark:text-slate-300"
                         aria-hidden
                     />
                     {application.notes}
+                </p>
+                <p className="flex items-center py-1 break-all text-slate-600 dark:text-slate-300">
+                    {props.link ? (
+                        <a
+                            href={props.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
+                        >
+                            Original Posting <ExternalLink className="ml-1 h-4 w-4" aria-hidden />
+                        </a>
+                    ) : (
+                        "No link provided"
+                    )}
                 </p>
             </div>
             <EditApplicationModal
