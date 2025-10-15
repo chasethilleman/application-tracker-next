@@ -152,7 +152,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                     />
                     {application.notes}
                 </p>
-                <p className="flex items-center py-1 break-all text-slate-600 dark:text-slate-300">
+                <p className="flex items-center py-3 break-all text-slate-600 dark:text-slate-300">
                     {props.link ? (
                         <a
                             href={props.link}
