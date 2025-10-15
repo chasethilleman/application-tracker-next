@@ -6,6 +6,7 @@ import Form from "../components/form";
 import ApplicationCard from "../components/applicationCard";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import { signIn, useSession } from "next-auth/react";
+import AddApplicationModal from "@/components/addApplicationModal";
 
 import type {
   ApplicationFormValues,
@@ -18,6 +19,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [confetti, setConfetti] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     let isCancelled = false;
@@ -176,77 +178,89 @@ export default function Home() {
   const isSessionLoading = status === "loading";
 
   return (
-    <div className="min-w-screen min-h-screen bg-white text-slate-900 dark:bg-neutral-900 dark:text-white transition-colors">
-      <div className="min-h-screen bg-white text-slate-900 dark:bg-neutral-900 dark:text-white transition-colors max-w-7xl mx-auto p-8">
-        {confetti && isAuthenticated && (
-          <Fireworks autorun={{ speed: 3, duration: 3000 }} />
-        )}
-        <Header
-          totalApplications={totalApplications}
-          appliedApplications={appliedApplications}
-          interviewingApplications={interviewingApplications}
-          offeredApplications={offeredApplications}
-          rejectedApplications={rejectedApplications}
-        />
-        {isSessionLoading ? (
-          <div className="flex flex-col items-center justify-center gap-4 py-20 text-slate-600 dark:text-slate-300">
-            <div
-              className="h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
-              role="status"
-              aria-label="Checking session"
-            />
-            <p>Checking your session…</p>
-          </div>
-        ) : isAuthenticated ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-            <Form addApplication={addApplication} />
-            <div className="applications-list col-span-2">
-              {error && (
-                <p className="mb-4 text-red-600 dark:text-red-400">{error}</p>
-              )}
-              {loading ? (
-                <div className="flex flex-col items-center justify-center gap-4 py-12 text-slate-600 dark:text-slate-300">
-                  <div
-                    className="h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
-                    role="status"
-                    aria-label="Loading applications"
-                  />
-                  <p>Loading applications…</p>
-                </div>
-              ) : applications.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                  {applications.map((application, index) => (
-                    <ApplicationCard
-                      key={application.id}
-                      {...application}
-                      deleteApplication={() => deleteApplication(application.id)}
-                      updateApplication={updateApplication}
-                      animationDelay={index * 80}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <p className="text-slate-600 dark:text-slate-300 text-center">
-                  No applications found.
-                </p>
-              )}
+    <>
+      <div className="min-w-screen min-h-screen bg-white text-slate-900 dark:bg-neutral-900 dark:text-white transition-colors">
+        <div className="min-h-screen bg-white text-slate-900 dark:bg-neutral-900 dark:text-white transition-colors max-w-7xl mx-auto p-8">
+          {confetti && isAuthenticated && (
+            <Fireworks autorun={{ speed: 3, duration: 3000 }} />
+          )}
+          <Header
+            totalApplications={totalApplications}
+            appliedApplications={appliedApplications}
+            interviewingApplications={interviewingApplications}
+            offeredApplications={offeredApplications}
+            rejectedApplications={rejectedApplications}
+            onAddApplication={() => setShowCreateModal(true)}
+          />
+          {isSessionLoading ? (
+            <div className="flex flex-col items-center justify-center gap-4 py-20 text-slate-600 dark:text-slate-300">
+              <div
+                className="h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
+                role="status"
+                aria-label="Checking session"
+              />
+              <p>Checking your session…</p>
             </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center gap-4 py-20 text-center text-slate-700 dark:text-slate-200">
-            <p className="text-lg font-medium">
-              Sign in to track and manage your applications.
-            </p>
-            <button
-              type="button"
-              onClick={() => signIn()}
-              className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
-            >
-              Sign in
-            </button>
-          </div>
-        )}
+          ) : isAuthenticated ? (
+            <div className="flex flex-col gap-4 md:grid md:grid-cols-3 md:items-start">
+              <div className="hidden md:block">
+                <Form addApplication={addApplication} />
+              </div>
+              <div className="applications-list md:col-span-2">
+                {error && (
+                  <p className="mb-4 text-red-600 dark:text-red-400">{error}</p>
+                )}
+                {loading ? (
+                  <div className="flex flex-col items-center justify-center gap-4 py-12 text-slate-600 dark:text-slate-300">
+                    <div
+                      className="h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
+                      role="status"
+                      aria-label="Loading applications"
+                    />
+                    <p>Loading applications…</p>
+                  </div>
+                ) : applications.length > 0 ? (
+                  <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-3">
+                    {applications.map((application, index) => (
+                      <ApplicationCard
+                        key={application.id}
+                        {...application}
+                        deleteApplication={() =>
+                          deleteApplication(application.id)
+                        }
+                        updateApplication={updateApplication}
+                        animationDelay={index * 80}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-slate-600 dark:text-slate-300 text-center">
+                    No applications found.
+                  </p>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-4 py-20 text-center text-slate-700 dark:text-slate-200">
+              <p className="text-lg font-medium">
+                Sign in to track and manage your applications.
+              </p>
+              <button
+                type="button"
+                onClick={() => signIn()}
+                className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
+              >
+                Sign in
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <AddApplicationModal
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        addApplication={addApplication}
+      />
+    </>
   );
 }

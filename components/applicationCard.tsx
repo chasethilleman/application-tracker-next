@@ -54,15 +54,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
     }
 
     async function handleDelete() {
-        try {
-            await deleteApplication();
-        } catch (err) {
-            const message =
-                err instanceof Error
-                    ? err.message
-                    : "Unable to delete application";
-            alert(message);
-        }
+        await deleteApplication();
     }
 
     async function handleSave(values: ApplicationFormValues) {
@@ -150,9 +142,9 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                     {application.notes}
                 </p>
                 <p className="flex items-center pt-3 break-all text-slate-600 dark:text-slate-300">
-                    {props.link ? (
+                    {application.link ? (
                         <a
-                            href={props.link}
+                            href={application.link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"

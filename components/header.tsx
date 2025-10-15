@@ -2,7 +2,15 @@
 
 import Image from "next/image";
 import clsx from "clsx";
-import { ScrollText, Check, BadgeCheck, X, Calendar } from "lucide-react";
+import {
+    ScrollText,
+    Check,
+    BadgeCheck,
+    X,
+    Calendar,
+    Plus,
+    type LucideIcon,
+} from "lucide-react";
 import JobsyBlack from "../assets/jobsy-black.png";
 import JobsyWhite from "../assets/jobsy-white.png";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -13,52 +21,65 @@ type HeaderProps = {
     interviewingApplications: number;
     offeredApplications: number;
     rejectedApplications: number;
+    onAddApplication: () => void;
 };
 
-function HeaderCard(props: { title: string; count: number }) {
-    return (
+const HEADER_CARD_META = {
+    "Total Applications": {
+        icon: ScrollText,
+        colorClass: "text-blue-800 dark:text-blue-300",
+    },
+    Applied: {
+        icon: Check,
+        colorClass: "text-blue-800 dark:text-blue-300",
+    },
+    Interviewing: {
+        icon: Calendar,
+        colorClass: "text-yellow-800 dark:text-yellow-200",
+    },
+    Offered: {
+        icon: BadgeCheck,
+        colorClass: "text-green-800 dark:text-green-300",
+    },
+    Rejected: {
+        icon: X,
+        colorClass: "text-red-800 dark:text-red-300",
+    },
+} as const;
 
-        <div className="border border-slate-200 dark:border-neutral-800 rounded-lg p-4 text-center w-full md:flex-1 min-w-0 bg-white dark:bg-neutral-900 transition-colors">
-            <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                    {props.title}
-                </p>
-                {props.title === "Total Applications" ? (
-                    <>
-                        <span className="text-blue-800 dark:text-blue-300 text-xs font-semibold">
-                            <ScrollText className="h-4 w-4" aria-hidden />
-                        </span>
-                    </>
-                ) : props.title === "Applied" ? (
-                    <>
-                        <span className="text-blue-800 dark:text-blue-300 text-xs font-semibold">
-                            <Check className="h-4 w-4" aria-hidden />
-                        </span>
-                    </>
-                ) : props.title === "Interviewing" ? (
-                    <>
-                        <span className="text-yellow-800 dark:text-yellow-200 text-xs font-semibold">
-                            <Calendar className="h-4 w-4" aria-hidden />
-                        </span>
-                    </>
-                ) : props.title === "Offered" ? (
-                    <>
-                        <span className="text-green-800 dark:text-green-300 text-xs font-semibold">
-                            <BadgeCheck className="h-4 w-4" aria-hidden />
-                        </span>
-                    </>
-                ) : props.title === "Rejected" ? (
-                    <>
-                        <span className="text-red-800 dark:text-red-300 text-xs font-semibold">
-                            <X className="h-4 w-4" aria-hidden />
-                        </span>
-                    </>
-                ) : null}
+type HeaderCardTitle = keyof typeof HEADER_CARD_META;
+
+type HeaderCardProps = {
+    title: HeaderCardTitle;
+    count: number;
+};
+
+function HeaderCard({ title, count }: HeaderCardProps) {
+    const meta = HEADER_CARD_META[title];
+    const Icon: LucideIcon = meta.icon;
+
+    return (
+        <div className="w-full md:flex-1">
+            <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-slate-800 shadow-sm transition-colors dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-slate-100 md:hidden">
+                <Icon className={clsx("h-4 w-4", meta.colorClass)} aria-hidden />
+                <span className="text-sm font-semibold">{count}</span>
+                <span className="sr-only">{title}</span>
             </div>
-            <div className="my-2 border-t border-slate-200 dark:border-slate-700" />
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                {props.count}
-            </h1>
+            <div className="hidden rounded-lg border border-slate-200 bg-white p-4 text-center transition-colors dark:border-neutral-800 dark:bg-neutral-900 md:block">
+                <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                        {title}
+                    </p>
+                    <Icon
+                        className={clsx("h-4 w-4", meta.colorClass)}
+                        aria-hidden
+                    />
+                </div>
+                <div className="my-2 border-t border-slate-200 dark:border-slate-700" />
+                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                    {count}
+                </p>
+            </div>
         </div>
     );
 }
@@ -69,6 +90,7 @@ export default function Header({
     interviewingApplications,
     offeredApplications,
     rejectedApplications,
+    onAddApplication,
 }: HeaderProps) {
     const { data: session, status } = useSession();
     const isLoadingSession = status === "loading";
@@ -103,7 +125,26 @@ export default function Header({
                         priority
                     />
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex w-full max-w-xs items-center gap-3 md:hidden">
+                    {userDisplayName && (
+                        <span className="truncate text-sm text-slate-600 dark:text-slate-300">
+                            {userDisplayName}
+                        </span>
+                    )}
+                    <button
+                        type="button"
+                        onClick={handleAuthAction}
+                        disabled={isLoadingSession}
+                        className="inline-flex flex-1 items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60 md:hidden"
+                    >
+                        {isLoadingSession
+                            ? "Checking…"
+                            : isAuthenticated
+                                ? "Sign out"
+                                : "Sign in"}
+                    </button>
+                </div>
+                <div className="hidden items-center gap-3 md:flex">
                     {userDisplayName && (
                         <span className="text-sm text-slate-600 dark:text-slate-300 truncate max-w-[12rem]">
                             {userDisplayName}
@@ -113,7 +154,7 @@ export default function Header({
                         type="button"
                         onClick={handleAuthAction}
                         disabled={isLoadingSession}
-                        className="cursor-pointer inline-flex items-center justify-center rounded-md border border-slate-300 dark:border-neutral-700 px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200 transition-colors hover:bg-slate-100 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoadingSession
                             ? "Checking…"
@@ -123,13 +164,28 @@ export default function Header({
                     </button>
                 </div>
             </div>
-            <div className="stats flex flex-col gap-4 md:flex-row">
+            <div className="stats flex flex-wrap gap-3 md:flex-row">
                 <HeaderCard title="Total Applications" count={totalApplications} />
                 <HeaderCard title="Applied" count={appliedApplications} />
                 <HeaderCard title="Interviewing" count={interviewingApplications} />
                 <HeaderCard title="Offered" count={offeredApplications} />
                 <HeaderCard title="Rejected" count={rejectedApplications} />
             </div>
+            <button
+                type="button"
+                onClick={() => {
+                    if (isAuthenticated) {
+                        onAddApplication();
+                    } else if (!isLoadingSession) {
+                        void signIn();
+                    }
+                }}
+                disabled={isLoadingSession}
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900 md:hidden"
+            >
+                <Plus className="h-4 w-4" aria-hidden />
+                {isAuthenticated ? "Add Application" : "Sign in to add"}
+            </button>
         </header>
     );
 }
