@@ -16,6 +16,7 @@ import {
     ExternalLink,
 } from "lucide-react";
 import EditApplicationModal from "./editApplicationModal";
+import ConfirmDeleteModal from "./confirmDeleteModal";
 
 type ApplicationCardProps = ApplicationRecord & {
     deleteApplication: () => Promise<void>;
@@ -46,25 +47,21 @@ export default function ApplicationCard(props: ApplicationCardProps) {
             : undefined;
 
     const [isEditing, setIsEditing] = useState(false);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+
     function handleOpenEdit() {
         setIsEditing(true);
     }
 
     async function handleDelete() {
-        if (
-            confirm(
-                `Are you sure you want to delete the application to ${application.company}? This action cannot be undone.`
-            )
-        ) {
-            try {
-                await deleteApplication();
-            } catch (err) {
-                const message =
-                    err instanceof Error
-                        ? err.message
-                        : "Unable to delete application";
-                alert(message);
-            }
+        try {
+            await deleteApplication();
+        } catch (err) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "Unable to delete application";
+            alert(message);
         }
     }
 
@@ -97,7 +94,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                         </button>
                         <button
                             type="button"
-                            onClick={handleDelete}
+                            onClick={() => setIsConfirmingDelete(true)}
                             aria-label={`Delete application to ${application.company}`}
                             className="cursor-pointer inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-600 transition-colors hover:bg-red-100 dark:border-red-800/40 dark:bg-red-950/30 dark:text-red-300 dark:hover:bg-red-900/40"
                         >
@@ -172,6 +169,16 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                 application={application}
                 onClose={() => setIsEditing(false)}
                 onSave={handleSave}
+            />
+            <ConfirmDeleteModal
+                open={isConfirmingDelete}
+                onClose={() => setIsConfirmingDelete(false)}
+                onConfirm={async () => {
+                    await handleDelete();
+                    setIsConfirmingDelete(false);
+                }}
+                company={application.company}
+                jobTitle={application.jobTitle}
             />
         </>
     );
