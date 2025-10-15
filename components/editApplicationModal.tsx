@@ -12,8 +12,10 @@ import {
     type ApplicationFormValues,
     type ApplicationRecord,
 } from "@shared/applicationSchema";
+import clsx from "clsx";
 
 const SALARY_FORMATTER = new Intl.NumberFormat("en-US");
+const ANIMATION_DURATION_MS = 200;
 
 type EditApplicationModalProps = {
     open: boolean;
@@ -50,12 +52,34 @@ export default function EditApplicationModal({
         useState<ApplicationFormValues>(initialState);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [shouldRender, setShouldRender] = useState(open);
+    const [animationState, setAnimationState] = useState<"enter" | "exit">(
+        open ? "enter" : "exit"
+    );
 
     useEffect(() => {
         setFormData(initialState);
     }, [initialState]);
 
-    if (!open) return null;
+    useEffect(() => {
+        if (open) {
+            setError(null);
+            setShouldRender(true);
+            setAnimationState("exit");
+            const raf = requestAnimationFrame(() => setAnimationState("enter"));
+            return () => cancelAnimationFrame(raf);
+        }
+
+        if (shouldRender) {
+            setAnimationState("exit");
+            const timeout = setTimeout(() => setShouldRender(false), ANIMATION_DURATION_MS);
+            return () => clearTimeout(timeout);
+        }
+
+        return;
+    }, [open, shouldRender]);
+
+    if (!shouldRender) return null;
 
     function onChange(
         event:
@@ -89,8 +113,20 @@ export default function EditApplicationModal({
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-            <div className="w-full max-w-xl rounded-lg bg-white shadow-lg dark:bg-neutral-900">
+        <div
+            className={clsx(
+                "fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 transition-opacity duration-200",
+                animationState === "enter" ? "opacity-100" : "opacity-0"
+            )}
+        >
+            <div
+                className={clsx(
+                    "w-full max-w-xl rounded-lg bg-white shadow-lg dark:bg-neutral-900 transform transition-all duration-200",
+                    animationState === "enter"
+                        ? "translate-y-0 scale-100 opacity-100"
+                        : "translate-y-4 scale-95 opacity-0"
+                )}
+            >
                 <form onSubmit={onSubmit} className="flex flex-col gap-4">
                     <div className="border-b border-slate-200 px-6 py-4 dark:border-neutral-800">
                         <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
