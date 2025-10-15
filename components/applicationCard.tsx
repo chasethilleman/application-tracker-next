@@ -68,7 +68,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
     return (
         <>
             <div
-                className="application-card border border-slate-200 dark:border-neutral-800 rounded-lg p-4 bg-white dark:bg-neutral-900 shadow text-left hover:shadow-lg transition-colors transition-shadow duration-300 card-slide-in"
+                className="application-card flex h-full flex-col border border-slate-200 dark:border-neutral-800 rounded-lg p-4 bg-white dark:bg-neutral-900 shadow text-left hover:shadow-lg transition-colors transition-shadow duration-300 card-slide-in"
                 style={animationStyle}
             >
                 <div className="flex items-start justify-between pb-2">
@@ -141,7 +141,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                     />
                     {application.notes}
                 </p>
-                <p className="flex items-center pt-3 break-all text-slate-600 dark:text-slate-300 self-end">
+                <p className="flex items-center pt-3 break-all text-slate-600 dark:text-slate-300 self-end mt-auto">
                     {application.link ? (
                         <a
                             href={application.link}
