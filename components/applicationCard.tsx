@@ -13,6 +13,7 @@ import {
     Link,
     FileText,
     Trash2,
+    Pencil
 } from "lucide-react";
 import EditApplicationModal from "./editApplicationModal";
 
@@ -92,7 +93,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                             className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
                             aria-label={`Edit application to ${application.company}`}
                         >
-                            Edit
+                            <Pencil className="mr-2 h-4 w-4" aria-hidden />
                         </button>
                         <button
                             type="button"
@@ -108,17 +109,17 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                     className={clsx(
                         "inline-block px-3 py-1 text-sm font-semibold rounded-full mb-4 transition-colors",
                         application.status === "Applied" &&
-                            "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200",
+                        "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200",
                         application.status === "Interviewing" &&
-                            "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+                        "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
                         application.status === "Offered" &&
-                            "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200",
+                        "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200",
                         application.status === "Rejected" &&
-                            "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200",
+                        "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200",
                         !["Applied", "Interviewing", "Offered", "Rejected"].includes(
                             application.status
                         ) &&
-                            "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                        "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200"
                     )}
                 >
                     {application.status}
