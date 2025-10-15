@@ -93,7 +93,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                             className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-300 text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
                             aria-label={`Edit application to ${application.company}`}
                         >
-                            <Pencil className="mr-2 h-4 w-4" aria-hidden />
+                            <Pencil className="h-4 w-4" aria-hidden />
                         </button>
                         <button
                             type="button"
