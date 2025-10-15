@@ -107,7 +107,7 @@ export default function ConfirmDeleteModal({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
+                        className="cursor-pointer inline-flex items-center justify-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
                         disabled={submitting}
                     >
                         Cancel
@@ -115,7 +115,7 @@ export default function ConfirmDeleteModal({
                     <button
                         type="button"
                         onClick={handleConfirm}
-                        className="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-red-500 dark:hover:bg-red-400 dark:focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="cursor-pointer inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-red-500 dark:hover:bg-red-400 dark:focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={submitting}
                     >
                         {submitting ? "Deleting…" : "Delete"}
