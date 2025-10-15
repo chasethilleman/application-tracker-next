@@ -90,7 +90,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                         <button
                             type="button"
                             onClick={handleOpenEdit}
-                            className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-600 transition-colors hover:bg-slate-100 dark:border-neutral-800 dark:bg-neutral-800/50 dark:text-slate-300 dark:hover:bg-neutral-800/70"
                             aria-label={`Edit application to ${application.company}`}
                         >
                             <Pencil className="mr-2 h-4 w-4" aria-hidden />
