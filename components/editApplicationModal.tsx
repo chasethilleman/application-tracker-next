@@ -53,9 +53,8 @@ export default function EditApplicationModal({
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [shouldRender, setShouldRender] = useState(open);
-    const [animationState, setAnimationState] = useState<"enter" | "exit">(
-        open ? "enter" : "exit"
-    );
+    const [animationState, setAnimationState] =
+        useState<"enter" | "exit">("exit");
 
     useEffect(() => {
         setFormData(initialState);
@@ -63,20 +62,30 @@ export default function EditApplicationModal({
 
     useEffect(() => {
         if (open) {
-            setError(null);
             setShouldRender(true);
+        }
+    }, [open]);
+
+    useEffect(() => {
+        if (!shouldRender) {
+            return;
+        }
+
+        if (open) {
+            setError(null);
             setAnimationState("exit");
-            const raf = requestAnimationFrame(() => setAnimationState("enter"));
+            const raf = requestAnimationFrame(() =>
+                setAnimationState("enter")
+            );
             return () => cancelAnimationFrame(raf);
         }
 
-        if (shouldRender) {
-            setAnimationState("exit");
-            const timeout = setTimeout(() => setShouldRender(false), ANIMATION_DURATION_MS);
-            return () => clearTimeout(timeout);
-        }
-
-        return;
+        setAnimationState("exit");
+        const timeout = setTimeout(
+            () => setShouldRender(false),
+            ANIMATION_DURATION_MS
+        );
+        return () => clearTimeout(timeout);
     }, [open, shouldRender]);
 
     if (!shouldRender) return null;
