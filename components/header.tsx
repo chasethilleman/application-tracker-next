@@ -125,7 +125,7 @@ export default function Header({
                         priority
                     />
                 </div>
-                <div className="flex w-full max-w-xs flex-col items-stretch gap-2 md:hidden">
+                <div className="flex max-w-xs flex-col items-stretch gap-2 md:hidden">
                     {userDisplayName && (
                         <span className="truncate text-sm text-slate-600 dark:text-slate-300">
                             {userDisplayName}
