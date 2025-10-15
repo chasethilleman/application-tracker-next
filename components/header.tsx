@@ -125,7 +125,7 @@ export default function Header({
                         priority
                     />
                 </div>
-                <div className="flex w-full max-w-xs items-center gap-3 md:hidden">
+                <div className="flex w-full max-w-xs flex-col items-stretch gap-2 md:hidden">
                     {userDisplayName && (
                         <span className="truncate text-sm text-slate-600 dark:text-slate-300">
                             {userDisplayName}
@@ -135,7 +135,7 @@ export default function Header({
                         type="button"
                         onClick={handleAuthAction}
                         disabled={isLoadingSession}
-                        className="inline-flex flex-1 items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60 md:hidden"
+                        className="inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoadingSession
                             ? "Checking…"
