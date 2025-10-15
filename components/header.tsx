@@ -59,8 +59,8 @@ function HeaderCard({ title, count }: HeaderCardProps) {
     const Icon: LucideIcon = meta.icon;
 
     return (
-        <div className="w-full md:flex-1">
-            <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-slate-800 shadow-sm transition-colors dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-slate-100 md:hidden">
+        <div className="flex-1 basis-1/2 min-w-[150px] md:basis-auto md:flex-1">
+            <div className="flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-slate-800 shadow-sm transition-colors dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-slate-100 md:hidden">
                 <Icon className={clsx("h-4 w-4", meta.colorClass)} aria-hidden />
                 <span className="text-sm font-semibold">{count}</span>
                 <span className="sr-only">{title}</span>
