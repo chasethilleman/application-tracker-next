@@ -96,7 +96,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                 </div>
                 <p
                     className={clsx(
-                        "inline-block px-3 py-1 text-sm font-semibold rounded-full mb-4 transition-colors",
+                        "inline-block self-start px-3 py-1 text-sm font-semibold rounded-full mb-4 transition-colors",
                         application.status === "Applied" &&
                         "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200",
                         application.status === "Interviewing" &&
@@ -141,7 +141,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                     />
                     {application.notes}
                 </p>
-                <p className="flex items-center pt-3 break-all text-slate-600 dark:text-slate-300 self-end mt-auto">
+                <p className="flex items-center pt-3 break-all text-slate-600 dark:text-slate-300 self-start mt-auto">
                     {application.link ? (
                         <a
                             href={application.link}
