@@ -1,5 +1,5 @@
 import NextAuth, { getServerSession, type NextAuthOptions, type DefaultSession } from "next-auth";
-import GitHub from "next-auth/providers/github";
+// import GitHub from "next-auth/providers/github";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import Google from "next-auth/providers/google";
@@ -15,10 +15,10 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
-        GitHub({
-            clientId: process.env.GITHUB_ID ?? "",
-            clientSecret: process.env.GITHUB_SECRET ?? "",
-        }),
+        // GitHub({
+        //     clientId: process.env.GITHUB_ID ?? "",
+        //     clientSecret: process.env.GITHUB_SECRET ?? "",
+        // }),
         Google({
             clientId: process.env.GOOGLE_ID ?? "",
             clientSecret: process.env.GOOGLE_SECRET ?? "",
