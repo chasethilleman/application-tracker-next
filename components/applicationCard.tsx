@@ -90,7 +90,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                         <button
                             type="button"
                             onClick={handleOpenEdit}
-                            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-300 text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
+                            className="cursor-pointer inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-300 text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800"
                             aria-label={`Edit application to ${application.company}`}
                         >
                             <Pencil className="h-4 w-4" aria-hidden />
@@ -99,7 +99,7 @@ export default function ApplicationCard(props: ApplicationCardProps) {
                             type="button"
                             onClick={handleDelete}
                             aria-label={`Delete application to ${application.company}`}
-                            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-600 transition-colors hover:bg-red-100 dark:border-red-800/40 dark:bg-red-950/30 dark:text-red-300 dark:hover:bg-red-900/40"
+                            className="cursor-pointer inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-600 transition-colors hover:bg-red-100 dark:border-red-800/40 dark:bg-red-950/30 dark:text-red-300 dark:hover:bg-red-900/40"
                         >
                             <Trash2 className="h-4 w-4" aria-hidden />
                         </button>
