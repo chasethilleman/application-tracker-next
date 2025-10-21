@@ -135,7 +135,7 @@ export default function Header({
                         type="button"
                         onClick={handleAuthAction}
                         disabled={isLoadingSession}
-                        className="inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="cursor-pointer inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoadingSession
                             ? "Checking…"
@@ -154,7 +154,7 @@ export default function Header({
                         type="button"
                         onClick={handleAuthAction}
                         disabled={isLoadingSession}
-                        className="inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="cursor-pointer inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoadingSession
                             ? "Checking…"
@@ -181,7 +181,7 @@ export default function Header({
                     }
                 }}
                 disabled={isLoadingSession}
-                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900 md:hidden"
+                className="cursor-pointer mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900 md:hidden"
             >
                 <Plus className="h-4 w-4" aria-hidden />
                 {isAuthenticated ? "Add Application" : "Sign in to add"}

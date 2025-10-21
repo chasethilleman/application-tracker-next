@@ -234,9 +234,14 @@ export default function Home() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-slate-600 dark:text-slate-300 text-center">
-                    No applications found.
-                  </p>
+                  <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-12 text-center text-slate-600 dark:border-slate-700 dark:bg-neutral-800/50 dark:text-slate-200">
+                    <p className="text-xl font-semibold text-slate-700 dark:text-slate-100">
+                      No applications yet
+                    </p>
+                    <p className="text-base">
+                      Add your first application to start tracking every lead in one place.
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
@@ -248,7 +253,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => signIn()}
-                className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
+                className="cursor-pointer inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
               >
                 Sign in
               </button>
