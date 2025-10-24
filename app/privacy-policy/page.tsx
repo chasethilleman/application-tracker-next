@@ -130,7 +130,7 @@ export default function PrivacyPolicyPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
-              Children's Privacy
+              Children&rsquo;s Privacy
             </h2>
             <p className="mt-3">
               Application Tracker is not directed to individuals under the age
