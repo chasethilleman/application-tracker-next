@@ -11,9 +11,9 @@ import {
     Plus,
     type LucideIcon,
 } from "lucide-react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import JobsyBlack from "../assets/jobsy-black.png";
 import JobsyWhite from "../assets/jobsy-white.png";
-import { useSession, signIn, signOut } from "next-auth/react";
 
 type HeaderProps = {
     totalApplications: number;
@@ -53,6 +53,8 @@ type HeaderCardProps = {
     title: HeaderCardTitle;
     count: number;
 };
+
+const GOOGLE_ICON_SRC = "/google-icon.svg";
 
 function HeaderCard({ title, count }: HeaderCardProps) {
     const meta = HEADER_CARD_META[title];
@@ -104,7 +106,7 @@ export default function Header({
         if (isAuthenticated) {
             void signOut();
         } else {
-            void signIn();
+            void signIn("google");
         }
     }
 
@@ -135,13 +137,24 @@ export default function Header({
                         type="button"
                         onClick={handleAuthAction}
                         disabled={isLoadingSession}
-                        className="cursor-pointer inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoadingSession
                             ? "Checking…"
                             : isAuthenticated
                                 ? "Sign out"
-                                : "Sign in"}
+                                : (
+                                    <>
+                                        <Image
+                                            src={GOOGLE_ICON_SRC}
+                                            alt="Google logo"
+                                            width={18}
+                                            height={18}
+                                            className="h-4 w-4"
+                                        />
+                                        <span>Sign in with Google</span>
+                                    </>
+                                )}
                     </button>
                 </div>
                 <div className="hidden items-center gap-3 md:flex">
@@ -154,13 +167,24 @@ export default function Header({
                         type="button"
                         onClick={handleAuthAction}
                         disabled={isLoadingSession}
-                        className="cursor-pointer inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoadingSession
                             ? "Checking…"
                             : isAuthenticated
                                 ? "Sign out"
-                                : "Sign in"}
+                                : (
+                                    <>
+                                        <Image
+                                            src={GOOGLE_ICON_SRC}
+                                            alt="Google logo"
+                                            width={18}
+                                            height={18}
+                                            className="h-4 w-4"
+                                        />
+                                        <span>Sign in with Google</span>
+                                    </>
+                                )}
                     </button>
                 </div>
             </div>
@@ -177,14 +201,29 @@ export default function Header({
                     if (isAuthenticated) {
                         onAddApplication();
                     } else if (!isLoadingSession) {
-                        void signIn();
+                        void signIn("google");
                     }
                 }}
                 disabled={isLoadingSession}
                 className="cursor-pointer mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900 md:hidden"
             >
-                <Plus className="h-4 w-4" aria-hidden />
-                {isAuthenticated ? "Add Application" : "Sign in to add"}
+                {isAuthenticated ? (
+                    <>
+                        <Plus className="h-4 w-4" aria-hidden />
+                        Add Application
+                    </>
+                ) : (
+                    <>
+                        <Image
+                            src={GOOGLE_ICON_SRC}
+                            alt="Google logo"
+                            width={18}
+                            height={18}
+                            className="h-4 w-4"
+                        />
+                        Sign in with Google
+                    </>
+                )}
             </button>
         </header>
     );

@@ -1,12 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import Header from "../components/header";
-import Form from "../components/form";
-import ApplicationCard from "../components/applicationCard";
-import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import { signIn, useSession } from "next-auth/react";
+import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import AddApplicationModal from "@/components/addApplicationModal";
+import ApplicationCard from "../components/applicationCard";
+import Form from "../components/form";
+import Header from "../components/header";
 
 import type {
   ApplicationFormValues,
@@ -252,10 +253,17 @@ export default function Home() {
               </p>
               <button
                 type="button"
-                onClick={() => signIn()}
-                className="cursor-pointer inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
+                onClick={() => signIn("google")}
+                className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
               >
-                Sign in
+                <Image
+                  src="/google-icon.svg"
+                  alt="Google logo"
+                  width={18}
+                  height={18}
+                  className="h-4 w-4"
+                />
+                <span>Sign in with Google</span>
               </button>
             </div>
           )}
