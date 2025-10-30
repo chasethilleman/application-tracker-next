@@ -61,13 +61,13 @@ function HeaderCard({ title, count }: HeaderCardProps) {
     const Icon: LucideIcon = meta.icon;
 
     return (
-        <div className="flex-1 basis-0 min-w-0 md:basis-auto md:flex-1">
-            <div className="flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-slate-800 shadow-sm transition-colors dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-slate-100 md:hidden">
+        <div className="h-full">
+            <div className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-slate-800 shadow-sm transition-colors dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-slate-100 md:hidden">
                 <Icon className={clsx("h-4 w-4", meta.colorClass)} aria-hidden />
                 <span className="text-sm font-semibold">{count}</span>
                 <span className="sr-only">{title}</span>
             </div>
-            <div className="hidden rounded-lg border border-slate-200 bg-white p-4 text-center transition-colors dark:border-neutral-800 dark:bg-neutral-900 md:block">
+            <div className="hidden h-full rounded-lg border border-slate-200 bg-white p-4 text-center transition-colors dark:border-neutral-800 dark:bg-neutral-900 md:flex md:flex-col">
                 <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
                         {title}
@@ -188,7 +188,7 @@ export default function Header({
                     </button>
                 </div>
             </div>
-            <div className="stats flex flex-nowrap gap-2 md:flex-wrap md:gap-3">
+            <div className="stats grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 md:gap-3">
                 <HeaderCard title="Total Applications" count={totalApplications} />
                 <HeaderCard title="Applied" count={appliedApplications} />
                 <HeaderCard title="Interviewing" count={interviewingApplications} />
