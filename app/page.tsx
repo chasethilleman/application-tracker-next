@@ -199,7 +199,7 @@ export default function Home() {
           rejectedApplications={rejectedApplications}
           onAddApplication={() => setShowCreateModal(true)}
         />
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 transition-colors sm:px-6 lg:px-8 md:overflow-hidden">
+        <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 pb-8 transition-colors sm:px-6 lg:px-8 md:overflow-hidden">
           {confetti && isAuthenticated && (
             <Fireworks autorun={{ speed: 3, duration: 3000 }} />
           )}
@@ -214,7 +214,7 @@ export default function Home() {
             </div>
           ) : isAuthenticated ? (
             <>
-              <div className="md:hidden">
+              <div className="md:hidden sticky top-[6.5rem] z-10 bg-white pb-4 dark:bg-neutral-900">
                 <Filter
                   statusFilter={statusFilter}
                   setStatusFilter={(status: string) =>
@@ -223,8 +223,8 @@ export default function Home() {
                   statusOptions={["All", ...STATUS_OPTIONS]}
                 />
               </div>
-              <div className="flex flex-col gap-4 md:grid md:h-full md:grid-cols-3 md:items-start md:gap-6">
-                <div className="hidden md:flex md:h-full md:flex-col md:overflow-y-auto md:pr-4">
+              <div className="flex flex-col gap-4 md:grid md:h-full md:min-h-0 md:grid-cols-3 md:items-start md:gap-6 md:overflow-hidden">
+                <div className="hidden md:flex md:h-full md:min-h-0 md:flex-col md:overflow-y-auto md:pr-4">
                   <div className="sticky top-0 z-[1] space-y-4 bg-white pb-2 dark:bg-neutral-900">
                     <button
                       type="button"
@@ -265,7 +265,7 @@ export default function Home() {
                     />
                   </div>
                 </div>
-                <div className="applications-list md:col-span-2 md:h-full md:overflow-y-auto md:pl-1 md:pr-1">
+                <div className="applications-list md:col-span-2 md:h-full md:min-h-0 md:overflow-y-auto md:pl-1 md:pr-1">
                   {error && (
                     <p className="mb-4 text-red-600 dark:text-red-400">{error}</p>
                   )}
