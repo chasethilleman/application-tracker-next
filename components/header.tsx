@@ -61,7 +61,7 @@ function HeaderCard({ title, count }: HeaderCardProps) {
     const Icon: LucideIcon = meta.icon;
 
     return (
-        <div className="h-full min-w-[140px] flex-shrink-0 md:min-w-0">
+        <div className="h-full min-w-0 flex-1 shrink md:min-w-0 md:flex-none">
             <div className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-slate-800 shadow-sm transition-colors dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-slate-100 md:hidden">
                 <Icon className={clsx("h-4 w-4", meta.colorClass)} aria-hidden />
                 <span className="text-sm font-semibold">{count}</span>
@@ -112,84 +112,86 @@ export default function Header({
 
     return (
         <header className="header sticky top-0 z-10 w-full bg-white transition-colors dark:bg-neutral-900 mb-4">
-            <div className="mx-auto max-w-7xl border-b border-slate-200 px-4 py-4 sm:px-6 lg:px-8 dark:border-neutral-800">
-                <div className="header-card mb-6 flex items-center justify-between pb-4">
-                    <div className="flex items-center">
-                        <Image
-                            src={JobsyBlack}
-                            alt="Jobsy Logo"
-                            className={clsx("h-16 w-auto", "dark:hidden")}
-                            priority
-                        />
-                        <Image
-                            src={JobsyWhite}
-                            alt="Jobsy Logo"
-                            className={clsx("hidden h-16 w-auto", "dark:block")}
-                            priority
-                        />
-                    </div>
-                    <div className="flex max-w-xs flex-col items-stretch gap-2 md:hidden">
-                        {userDisplayName && (
-                            <span className="truncate text-sm text-slate-600 dark:text-slate-300">
-                                {userDisplayName}
-                            </span>
-                        )}
-                        <button
-                            type="button"
-                            onClick={handleAuthAction}
-                            disabled={isLoadingSession}
-                            className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
-                        >
-                            {isLoadingSession
-                                ? "Checking…"
-                                : isAuthenticated
-                                    ? "Sign out"
-                                    : (
-                                        <>
-                                            <Image
-                                                src={GOOGLE_ICON_SRC}
-                                                alt="Google logo"
-                                                width={18}
-                                                height={18}
-                                                className="h-4 w-4"
-                                            />
-                                            <span>Sign in with Google</span>
-                                        </>
-                                    )}
-                        </button>
-                    </div>
-                    <div className="hidden items-center gap-3 md:flex">
-                        {userDisplayName && (
-                            <span className="max-w-[12rem] truncate text-sm text-slate-600 dark:text-slate-300">
-                                {userDisplayName}
-                            </span>
-                        )}
-                        <button
-                            type="button"
-                            onClick={handleAuthAction}
-                            disabled={isLoadingSession}
-                            className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
-                        >
-                            {isLoadingSession
-                                ? "Checking…"
-                                : isAuthenticated
-                                    ? "Sign out"
-                                    : (
-                                        <>
-                                            <Image
-                                                src={GOOGLE_ICON_SRC}
-                                                alt="Google logo"
-                                                width={18}
-                                                height={18}
-                                                className="h-4 w-4"
-                                            />
-                                            <span>Sign in with Google</span>
-                                        </>
-                                    )}
-                        </button>
+            <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+                <div className="border-b border-slate-200 pb-4 dark:border-neutral-800">
+                    <div className="header-card flex items-center justify-between">
+                        <div className="flex items-center">
+                            <Image
+                                src={JobsyBlack}
+                                alt="Jobsy Logo"
+                                className={clsx("h-16 w-auto", "dark:hidden")}
+                                priority
+                            />
+                            <Image
+                                src={JobsyWhite}
+                                alt="Jobsy Logo"
+                                className={clsx("hidden h-16 w-auto", "dark:block")}
+                                priority
+                            />
+                        </div>
+                        <div className="flex max-w-xs flex-col items-stretch gap-2 md:hidden">
+                            {userDisplayName && (
+                                <span className="truncate text-sm text-slate-600 dark:text-slate-300">
+                                    {userDisplayName}
+                                </span>
+                            )}
+                            <button
+                                type="button"
+                                onClick={handleAuthAction}
+                                disabled={isLoadingSession}
+                                className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                                {isLoadingSession
+                                    ? "Checking…"
+                                    : isAuthenticated
+                                        ? "Sign out"
+                                        : (
+                                            <>
+                                                <Image
+                                                    src={GOOGLE_ICON_SRC}
+                                                    alt="Google logo"
+                                                    width={18}
+                                                    height={18}
+                                                    className="h-4 w-4"
+                                                />
+                                                <span>Sign in with Google</span>
+                                            </>
+                                        )}
+                            </button>
+                        </div>
+                        <div className="hidden items-center gap-3 md:flex">
+                            {userDisplayName && (
+                                <span className="max-w-[12rem] truncate text-sm text-slate-600 dark:text-slate-300">
+                                    {userDisplayName}
+                                </span>
+                            )}
+                            <button
+                                type="button"
+                                onClick={handleAuthAction}
+                                disabled={isLoadingSession}
+                                className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-neutral-700 dark:text-slate-200 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                                {isLoadingSession
+                                    ? "Checking…"
+                                    : isAuthenticated
+                                        ? "Sign out"
+                                        : (
+                                            <>
+                                                <Image
+                                                    src={GOOGLE_ICON_SRC}
+                                                    alt="Google logo"
+                                                    width={18}
+                                                    height={18}
+                                                    className="h-4 w-4"
+                                                />
+                                                <span>Sign in with Google</span>
+                                            </>
+                                        )}
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div className="stats flex flex-nowrap gap-2 overflow-x-auto md:grid md:grid-cols-5 md:gap-3 md:overflow-visible">
+                <div className="stats mt-6 flex flex-nowrap gap-2 overflow-hidden md:grid md:grid-cols-5 md:gap-3 md:overflow-visible">
                     <HeaderCard title="Total Applications" count={totalApplications} />
                     <HeaderCard title="Applied" count={appliedApplications} />
                     <HeaderCard title="Interviewing" count={interviewingApplications} />
@@ -226,6 +228,9 @@ export default function Header({
                         </>
                     )}
                 </button>
+            </div>
+            <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="h-px bg-slate-200 dark:bg-neutral-800" />
             </div>
         </header>
     );
