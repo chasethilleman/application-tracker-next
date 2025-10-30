@@ -9,10 +9,14 @@ import ApplicationCard from "../components/applicationCard";
 import Form from "../components/form";
 import Header from "../components/header";
 
-import type {
-  ApplicationFormValues,
-  ApplicationRecord,
+import {
+  STATUS_OPTIONS,
+  type ApplicationFormValues,
+  type ApplicationRecord,
+  type ApplicationStatus,
 } from "@shared/applicationSchema";
+import Filter from "@/components/filter";
+import { stat } from "fs";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -21,6 +25,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [confetti, setConfetti] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<"All" | ApplicationStatus>("All");
 
   useEffect(() => {
     let isCancelled = false;
@@ -29,7 +34,10 @@ export default function Home() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("/api/applications");
+        const params = new URLSearchParams();
+        if (statusFilter !== "All") params.set("status", statusFilter);
+
+        const response = await fetch(`/api/applications?${params.toString()}`);
         if (!response.ok) {
           throw new Error("Failed to load applications");
         }
@@ -71,7 +79,7 @@ export default function Home() {
     return () => {
       isCancelled = true;
     };
-  }, [status]);
+  }, [status, statusFilter]);
 
   async function addApplication(application: ApplicationFormValues) {
     if (status !== "authenticated") {
@@ -205,6 +213,13 @@ export default function Home() {
           ) : isAuthenticated ? (
             <div className="flex flex-col gap-4 md:grid md:grid-cols-3 md:items-start">
               <div className="hidden md:block">
+                <Filter
+                  statusFilter={statusFilter}
+                  setStatusFilter={(status: string) =>
+                    setStatusFilter(status as "All" | ApplicationStatus)
+                  }
+                  statusOptions={[...STATUS_OPTIONS]}
+                />
                 <Form addApplication={addApplication} />
               </div>
               <div className="applications-list md:col-span-2">
@@ -237,7 +252,9 @@ export default function Home() {
                 ) : (
                   <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-12 text-center text-slate-600 dark:border-slate-700 dark:bg-neutral-800/50 dark:text-slate-200">
                     <p className="text-xl font-semibold text-slate-700 dark:text-slate-100">
-                      No applications yet
+                      {statusFilter === "All"
+                        ? "No applications yet"
+                        : `No applications with status "${statusFilter}"`}
                     </p>
                     <p className="text-base">
                       Add your first application to start tracking every lead in one place.

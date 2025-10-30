@@ -7,18 +7,30 @@ import {
     toApplicationRecord,
     toNullable,
 } from "./utils";
+import { STATUS_OPTIONS, type ApplicationStatus } from "@shared/applicationSchema";
 
 type ErrorResponse = { message: string };
 type SuccessResponse = ApplicationRecord | ApplicationRecord[];
 
-export async function GET() {
+export async function GET(req: NextRequest) {
     const session = await auth();
     if (!session?.user?.id) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     try {
+        const statusParam = req.nextUrl.searchParams.get("status");
+        const validStatuses = new Set<ApplicationStatus>(STATUS_OPTIONS);
+        const statusFilter = statusParam && validStatuses.has(statusParam as ApplicationStatus)
+            ? (statusParam as ApplicationStatus)
+            : null;
+
         const applications = await prisma.application.findMany({
-            where: { userId: session.user.id },
+            where: {
+                userId: session.user.id,
+                ...(statusFilter ? { status: statusFilter } : {}),
+            },
             orderBy: { createdAt: "desc" },
         });
+
+
 
         return NextResponse.json<SuccessResponse>(
             applications.map((app) => toApplicationRecord(app))
