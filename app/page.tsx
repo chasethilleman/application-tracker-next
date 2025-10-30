@@ -25,6 +25,14 @@ export default function Home() {
   const [confetti, setConfetti] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"All" | ApplicationStatus>("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const id = setTimeout(() => setDebouncedSearch(searchTerm.trim()), 300);
+    return () => clearTimeout(id);
+  }, [searchTerm]);
+
 
   useEffect(() => {
     let isCancelled = false;
@@ -35,6 +43,7 @@ export default function Home() {
       try {
         const params = new URLSearchParams();
         if (statusFilter !== "All") params.set("status", statusFilter);
+        if (debouncedSearch.length > 0) params.set("q", debouncedSearch);
         const query = params.toString();
 
         const response = await fetch(
@@ -71,6 +80,8 @@ export default function Home() {
       setApplications([]);
       setError(null);
       setLoading(false);
+      setSearchTerm("");
+      setDebouncedSearch("");
       return () => {
         isCancelled = true;
       };
@@ -81,7 +92,7 @@ export default function Home() {
     return () => {
       isCancelled = true;
     };
-  }, [status, statusFilter]);
+  }, [status, statusFilter, debouncedSearch]);
 
   async function addApplication(application: ApplicationFormValues) {
     if (status !== "authenticated") {
@@ -221,6 +232,9 @@ export default function Home() {
                     setStatusFilter(status as "All" | ApplicationStatus)
                   }
                   statusOptions={["All", ...STATUS_OPTIONS]}
+                  searchTerm={searchTerm}
+                  onSearchChange={setSearchTerm}
+                  onClearSearch={() => setSearchTerm("")}
                 />
               </div>
               <div className="flex flex-col gap-4 md:grid md:h-full md:min-h-0 md:grid-cols-3 md:items-start md:gap-6 md:overflow-hidden">
@@ -262,6 +276,9 @@ export default function Home() {
                         setStatusFilter(status as "All" | ApplicationStatus)
                       }
                       statusOptions={["All", ...STATUS_OPTIONS]}
+                      searchTerm={searchTerm}
+                      onSearchChange={setSearchTerm}
+                      onClearSearch={() => setSearchTerm("")}
                     />
                   </div>
                 </div>

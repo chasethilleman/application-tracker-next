@@ -21,11 +21,23 @@ export async function GET(req: NextRequest) {
         const statusFilter = statusParam && validStatuses.has(statusParam as ApplicationStatus)
             ? (statusParam as ApplicationStatus)
             : null;
+        const searchParam = req.nextUrl.searchParams.get("q")?.trim();
+        const search = searchParam?.length ? searchParam : null;
+
 
         const applications = await prisma.application.findMany({
             where: {
                 userId: session.user.id,
                 ...(statusFilter ? { status: statusFilter } : {}),
+                ...(search
+                    ? {
+                        OR: [
+                            { company: { contains: search, mode: "insensitive" } },
+                            { jobTitle: { contains: search, mode: "insensitive" } },
+                            { notes: { contains: search, mode: "insensitive" } },
+                        ],
+                    }
+                    : {}),
             },
             orderBy: { createdAt: "desc" },
         });
