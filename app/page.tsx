@@ -16,7 +16,6 @@ import {
   type ApplicationStatus,
 } from "@shared/applicationSchema";
 import Filter from "@/components/filter";
-import { stat } from "fs";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -36,8 +35,11 @@ export default function Home() {
       try {
         const params = new URLSearchParams();
         if (statusFilter !== "All") params.set("status", statusFilter);
+        const query = params.toString();
 
-        const response = await fetch(`/api/applications?${params.toString()}`);
+        const response = await fetch(
+          query ? `/api/applications?${query}` : "/api/applications"
+        );
         if (!response.ok) {
           throw new Error("Failed to load applications");
         }
@@ -211,58 +213,71 @@ export default function Home() {
               <p>Checking your session…</p>
             </div>
           ) : isAuthenticated ? (
-            <div className="flex flex-col gap-4 md:grid md:grid-cols-3 md:items-start">
-              <div className="hidden md:block">
+            <>
+              <div className="md:hidden">
                 <Filter
                   statusFilter={statusFilter}
                   setStatusFilter={(status: string) =>
                     setStatusFilter(status as "All" | ApplicationStatus)
                   }
-                  statusOptions={[...STATUS_OPTIONS]}
+                  statusOptions={["All", ...STATUS_OPTIONS]}
                 />
-                <Form addApplication={addApplication} />
               </div>
-              <div className="applications-list md:col-span-2">
-                {error && (
-                  <p className="mb-4 text-red-600 dark:text-red-400">{error}</p>
-                )}
-                {loading ? (
-                  <div className="flex flex-col items-center justify-center gap-4 py-12 text-slate-600 dark:text-slate-300">
-                    <div
-                      className="h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
-                      role="status"
-                      aria-label="Loading applications"
+              <div className="flex flex-col gap-4 md:grid md:grid-cols-3 md:items-start md:gap-6">
+                <div className="hidden md:flex md:h-[calc(100vh-16rem)] md:flex-col md:gap-4 md:overflow-y-auto md:pr-4">
+                  <div className="sticky top-0 z-[1] bg-white pb-2 dark:bg-neutral-900">
+                    <Filter
+                      statusFilter={statusFilter}
+                      setStatusFilter={(status: string) =>
+                        setStatusFilter(status as "All" | ApplicationStatus)
+                      }
+                      statusOptions={["All", ...STATUS_OPTIONS]}
                     />
-                    <p>Loading applications…</p>
                   </div>
-                ) : applications.length > 0 ? (
-                  <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {applications.map((application, index) => (
-                      <ApplicationCard
-                        key={application.id}
-                        {...application}
-                        deleteApplication={() =>
-                          deleteApplication(application.id)
-                        }
-                        updateApplication={updateApplication}
-                        animationDelay={index * 80}
+                  <Form addApplication={addApplication} />
+                </div>
+                <div className="applications-list md:col-span-2 md:h-[calc(100vh-16rem)] md:overflow-y-auto md:pl-1 md:pr-1">
+                  {error && (
+                    <p className="mb-4 text-red-600 dark:text-red-400">{error}</p>
+                  )}
+                  {loading ? (
+                    <div className="flex flex-col items-center justify-center gap-4 py-12 text-slate-600 dark:text-slate-300">
+                      <div
+                        className="h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
+                        role="status"
+                        aria-label="Loading applications"
                       />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-12 text-center text-slate-600 dark:border-slate-700 dark:bg-neutral-800/50 dark:text-slate-200">
-                    <p className="text-xl font-semibold text-slate-700 dark:text-slate-100">
-                      {statusFilter === "All"
-                        ? "No applications yet"
-                        : `No applications with status "${statusFilter}"`}
-                    </p>
-                    <p className="text-base">
-                      Add your first application to start tracking every lead in one place.
-                    </p>
-                  </div>
-                )}
+                      <p>Loading applications…</p>
+                    </div>
+                  ) : applications.length > 0 ? (
+                    <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {applications.map((application, index) => (
+                        <ApplicationCard
+                          key={application.id}
+                          {...application}
+                          deleteApplication={() =>
+                            deleteApplication(application.id)
+                          }
+                          updateApplication={updateApplication}
+                          animationDelay={index * 80}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-12 text-center text-slate-600 dark:border-slate-700 dark:bg-neutral-800/50 dark:text-slate-200">
+                      <p className="text-xl font-semibold text-slate-700 dark:text-slate-100">
+                        {statusFilter === "All"
+                          ? "No applications yet"
+                          : `No applications with status "${statusFilter}"`}
+                      </p>
+                      <p className="text-base">
+                        Add your first application to start tracking every lead in one place.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            </>
           ) : (
             <div className="flex flex-col items-center justify-center gap-4 py-20 text-center text-slate-700 dark:text-slate-200">
               <p className="text-lg font-medium">
