@@ -180,19 +180,19 @@ export default function Home() {
 
   return (
     <>
-      <div className="min-w-screen min-h-screen bg-white text-slate-900 dark:bg-neutral-900 dark:text-white transition-colors">
-        <div className="min-h-screen bg-white text-slate-900 dark:bg-neutral-900 dark:text-white transition-colors max-w-7xl mx-auto p-8">
+      <div className="min-w-screen min-h-screen bg-white text-slate-900 transition-colors dark:bg-neutral-900 dark:text-white">
+        <Header
+          totalApplications={totalApplications}
+          appliedApplications={appliedApplications}
+          interviewingApplications={interviewingApplications}
+          offeredApplications={offeredApplications}
+          rejectedApplications={rejectedApplications}
+          onAddApplication={() => setShowCreateModal(true)}
+        />
+        <main className="mx-auto min-h-screen max-w-7xl px-4 py-8 transition-colors sm:px-6 lg:px-8">
           {confetti && isAuthenticated && (
             <Fireworks autorun={{ speed: 3, duration: 3000 }} />
           )}
-          <Header
-            totalApplications={totalApplications}
-            appliedApplications={appliedApplications}
-            interviewingApplications={interviewingApplications}
-            offeredApplications={offeredApplications}
-            rejectedApplications={rejectedApplications}
-            onAddApplication={() => setShowCreateModal(true)}
-          />
           {isSessionLoading ? (
             <div className="flex flex-col items-center justify-center gap-4 py-20 text-slate-600 dark:text-slate-300">
               <div
@@ -221,7 +221,7 @@ export default function Home() {
                     <p>Loading applications…</p>
                   </div>
                 ) : applications.length > 0 ? (
-                  <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {applications.map((application, index) => (
                       <ApplicationCard
                         key={application.id}
@@ -254,7 +254,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => signIn("google")}
-                className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
               >
                 <Image
                   src="/google-icon.svg"
@@ -267,7 +267,7 @@ export default function Home() {
               </button>
             </div>
           )}
-        </div>
+        </main>
       </div>
       <AddApplicationModal
         open={showCreateModal}
