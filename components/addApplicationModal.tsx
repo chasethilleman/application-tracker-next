@@ -122,16 +122,16 @@ export default function AddApplicationModal({
     return (
         <div
             className={clsx(
-                "fixed inset-0 z-50 flex h-full w-full flex-col bg-black/60 transition-opacity duration-200",
+                "fixed inset-0 z-50 flex h-full w-full flex-col bg-black/60 transition-opacity duration-200 md:items-center md:justify-center md:bg-black/40 md:px-4",
                 animationState === "enter" ? "opacity-100" : "opacity-0"
             )}
         >
             <div
                 className={clsx(
-                    "flex h-full w-full flex-col bg-white shadow-xl transition-transform duration-200 dark:bg-neutral-900",
+                    "flex h-full w-full flex-col bg-white shadow-xl transition-all duration-200 dark:bg-neutral-900 md:h-auto md:max-h-[80vh] md:w-full md:max-w-xl md:rounded-lg md:shadow-lg",
                     animationState === "enter"
-                        ? "translate-y-0"
-                        : "translate-y-full"
+                        ? "translate-y-0 md:translate-y-0 md:scale-100 md:opacity-100"
+                        : "translate-y-full md:translate-y-4 md:scale-95 md:opacity-0"
                 )}
             >
                 <header className="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:border-neutral-800">
