@@ -111,9 +111,9 @@ export default function Header({
     }
 
     return (
-        <header className="header sticky top-0 z-10 w-full border-b border-slate-200 bg-white transition-colors dark:border-neutral-800 dark:bg-neutral-900 mb-4">
-            <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-                <div className="header-card mb-6 flex items-center justify-between border-b border-slate-200 pb-4 dark:border-neutral-800">
+        <header className="header sticky top-0 z-10 w-full bg-white transition-colors dark:bg-neutral-900 mb-4">
+            <div className="mx-auto max-w-7xl border-b border-slate-200 px-4 py-4 sm:px-6 lg:px-8 dark:border-neutral-800">
+                <div className="header-card mb-6 flex items-center justify-between pb-4">
                     <div className="flex items-center">
                         <Image
                             src={JobsyBlack}
