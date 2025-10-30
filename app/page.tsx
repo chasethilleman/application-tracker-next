@@ -214,7 +214,7 @@ export default function Home() {
             </div>
           ) : isAuthenticated ? (
             <>
-              <div className="md:hidden sticky top-[6.5rem] z-10 bg-white pb-4 dark:bg-neutral-900 border-b border-slate-200 dark:border-neutral-800">
+              <div className="md:hidden sticky top-[6.5rem] z-10 bg-white mb-4 dark:bg-neutral-900 border-b border-slate-200 dark:border-neutral-800">
                 <Filter
                   statusFilter={statusFilter}
                   setStatusFilter={(status: string) =>
