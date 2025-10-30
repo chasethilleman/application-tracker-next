@@ -8,7 +8,7 @@ export default function Filter({
     statusOptions: string[];
 }) {
     return (
-        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4 text-left shadow-sm transition-colors dark:border-neutral-800 dark:bg-neutral-900">
+        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4 text-left transition-colors dark:border-neutral-800 dark:bg-neutral-900">
             <div className="flex flex-col gap-2">
                 <label
                     htmlFor="statusFilter"

@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
+import { Plus } from "lucide-react";
 import AddApplicationModal from "@/components/addApplicationModal";
 import ApplicationCard from "../components/applicationCard";
-import Form from "../components/form";
 import Header from "../components/header";
 
 import {
@@ -190,7 +190,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="min-w-screen min-h-screen bg-white text-slate-900 transition-colors dark:bg-neutral-900 dark:text-white">
+      <div className="min-h-screen bg-white text-slate-900 transition-colors dark:bg-neutral-900 dark:text-white flex flex-col">
         <Header
           totalApplications={totalApplications}
           appliedApplications={appliedApplications}
@@ -199,7 +199,7 @@ export default function Home() {
           rejectedApplications={rejectedApplications}
           onAddApplication={() => setShowCreateModal(true)}
         />
-        <main className="mx-auto min-h-screen max-w-7xl px-4 py-8 transition-colors sm:px-6 lg:px-8">
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 transition-colors sm:px-6 lg:px-8 md:overflow-hidden">
           {confetti && isAuthenticated && (
             <Fireworks autorun={{ speed: 3, duration: 3000 }} />
           )}
@@ -223,9 +223,39 @@ export default function Home() {
                   statusOptions={["All", ...STATUS_OPTIONS]}
                 />
               </div>
-              <div className="flex flex-col gap-4 md:grid md:grid-cols-3 md:items-start md:gap-6">
-                <div className="hidden md:flex md:h-[calc(100vh-16rem)] md:flex-col md:gap-4 md:overflow-y-auto md:pr-4">
-                  <div className="sticky top-0 z-[1] bg-white pb-2 dark:bg-neutral-900">
+              <div className="flex flex-col gap-4 md:grid md:h-full md:grid-cols-3 md:items-start md:gap-6">
+                <div className="hidden md:flex md:h-full md:flex-col md:overflow-y-auto md:pr-4">
+                  <div className="sticky top-0 z-[1] space-y-4 bg-white pb-2 dark:bg-neutral-900">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (isAuthenticated) {
+                          setShowCreateModal(true);
+                        } else if (!isSessionLoading) {
+                          void signIn("google");
+                        }
+                      }}
+                      disabled={isSessionLoading}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus:ring-offset-slate-900"
+                    >
+                      {isAuthenticated ? (
+                        <>
+                          <Plus className="h-4 w-4" aria-hidden />
+                          Add Application
+                        </>
+                      ) : (
+                        <>
+                          <Image
+                            src="/google-icon.svg"
+                            alt="Google logo"
+                            width={18}
+                            height={18}
+                            className="h-4 w-4"
+                          />
+                          Sign in with Google
+                        </>
+                      )}
+                    </button>
                     <Filter
                       statusFilter={statusFilter}
                       setStatusFilter={(status: string) =>
@@ -234,9 +264,8 @@ export default function Home() {
                       statusOptions={["All", ...STATUS_OPTIONS]}
                     />
                   </div>
-                  <Form addApplication={addApplication} />
                 </div>
-                <div className="applications-list md:col-span-2 md:h-[calc(100vh-16rem)] md:overflow-y-auto md:pl-1 md:pr-1">
+                <div className="applications-list md:col-span-2 md:h-full md:overflow-y-auto md:pl-1 md:pr-1">
                   {error && (
                     <p className="mb-4 text-red-600 dark:text-red-400">{error}</p>
                   )}
